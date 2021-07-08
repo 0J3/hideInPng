@@ -110,7 +110,7 @@ const argv = yargs(hideBin(process.argv))
 	fs.appendFileSync(path.resolve(argv.outPath), fs.readFileSync(inp));
 
 	console.log(`➤ Cleaning Up...`);
-	fs.rmdir(path.resolve(tmpDir), { recursive: true }, err => {
+	fs.rm(path.resolve(tmpDir), { recursive: true }, err => {
 		if (err) {
 			throw err;
 		}
