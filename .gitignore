@@ -1,0 +1,11 @@
+hash.md
+out.png
+in.txt
+tmp_*
+index.js
+
+*-win.exe
+*-macos
+*-linux
+
+node_modules

@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"rootDir": ".",
+		"outDir": ".",
+		"inlineSourceMap": true
+	},
+	"include": ["*"],
+	"exclude": ["bashVariant/*"]
+}
