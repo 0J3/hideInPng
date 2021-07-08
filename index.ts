@@ -24,7 +24,6 @@ const argv = yargs(hideBin(process.argv))
 		description:
 			'If piping data, this is the filename that the data is saved as',
 		conflicts: ['inputFile'],
-		default: 'data.txt',
 	})
 	.option('outPath', {
 		alias: ['o'],
@@ -50,11 +49,13 @@ const argv = yargs(hideBin(process.argv))
 				`➤ '-I' not specified - checking for piped input\n  ➤ If its stuck here, enter some text to write that as the hidden data`,
 				async data => {
 					console.log(
-						`➤ Data (as ${argv.pipedFileName} in final zip): ${data}`
+						`➤ Data (as ${
+							argv.pipedFileName || 'data.txt'
+						} in final zip): ${data}`
 					);
 					readline.close();
 					const xDir = path.resolve(tmpDir, 'pipedInput');
-					const x = path.resolve(xDir, argv.pipedFileName);
+					const x = path.resolve(xDir, argv.pipedFileName || 'data.txt');
 					fs.mkdirSync(xDir);
 					fs.writeFileSync(x, data);
 					console.log(`➤ Wrote the above data to ${x}`);
@@ -68,9 +69,14 @@ const argv = yargs(hideBin(process.argv))
 			);
 		});
 	} else {
-		fs.copyFileSync(inputFile, path.resolve(`${tmpDir}/inputFile`));
-		console.log(`➤ Copied Input File/Folder to Temp Dir`);
-		inputFile = path.resolve(`${tmpDir}/inputFile`);
+		const stat = fs.statSync(inputFile);
+		const isDir = stat.isDirectory();
+		if (!isDir) {
+			fs.copyFileSync(inputFile, path.resolve(`${tmpDir}/inputFile`));
+			console.log(`➤ Copied Input File/Folder to Temp Dir`);
+
+			inputFile = path.resolve(`${tmpDir}/inputFile`);
+		}
 	}
 
 	fs.copyFileSync(argv.inputImage, path.resolve(`${tmpDir}/inputImage`));
